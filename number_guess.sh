@@ -62,16 +62,3 @@ while true; do
     echo "It's higher than that, guess again:"
   fi
 done
-# Check if user exists in the database
-USER_INFO=$($PSQL "SELECT games_played, best_game FROM users WHERE username='$USERNAME'")
-
-if [[ -z $USER_INFO ]]; then
-  # New user
-  echo -e "\nWelcome, $USERNAME! It looks like this is your first time here."
-  $PSQL "INSERT INTO users(username, games_played, best_game) VALUES('$USERNAME', 0, 1000)"
-else
-  # Returning user
-  echo "$USER_INFO" | while IFS="|" read GAMES_PLAYED BEST_GAME; do
-    echo -e "\nWelcome back, $USERNAME! You have played $GAMES_PLAYED games, and your best game took $BEST_GAME guesses."
-  done
-fi
